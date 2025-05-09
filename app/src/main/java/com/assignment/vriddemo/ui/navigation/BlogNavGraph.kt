@@ -30,7 +30,10 @@ fun BlogNavGraph(navController: NavHostController, modifier: Modifier = Modifier
 
             BlogListScreen(
                 posts = posts,
-                navController = navController,
+                onLoadMore = { viewModel.loadNextPage() },
+                onItemClick = { post ->
+                    navController.navigate(Screen.BlogDetail.passId(post.id))
+                },
                 modifier = modifier
             )
         }
@@ -51,7 +54,10 @@ fun BlogNavGraph(navController: NavHostController, modifier: Modifier = Modifier
 
             BlogDetailScreen(
                 blogId = blogId,
-                viewModel = viewModel,
+                onLoadBlogDetail = { id ->
+                    // Fetch the blog post from the list of blogs
+                    viewModel.blogPosts.value.find { it.id == id }
+                },
                 modifier = modifier
             )
         }
