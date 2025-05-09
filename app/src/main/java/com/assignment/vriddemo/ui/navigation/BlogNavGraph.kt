@@ -27,13 +27,18 @@ fun BlogNavGraph(navController: NavHostController, modifier: Modifier = Modifier
         composable(Screen.BlogList.route) { backStackEntry ->
             val viewModel: BlogViewModel = hiltViewModel()
             val posts by viewModel.blogPosts.collectAsStateWithLifecycle()
+            val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+            val networkError by viewModel.networkError.collectAsStateWithLifecycle()
 
             BlogListScreen(
                 posts = posts,
-                onLoadMore = { viewModel.loadNextPage() },
+                isLoading = isLoading,
+                onLoadMore = viewModel::loadNextPage,
                 onItemClick = { post ->
                     navController.navigate(Screen.BlogDetail.passId(post.id))
                 },
+                networkError = networkError,
+                onRetry = viewModel::retry,
                 modifier = modifier
             )
         }
@@ -52,12 +57,17 @@ fun BlogNavGraph(navController: NavHostController, modifier: Modifier = Modifier
             val viewModel: BlogViewModel = hiltViewModel(parentEntry)
             val blogId = backStackEntry.arguments?.getInt("blogId") ?: -1
 
+            val networkError = viewModel.networkError.collectAsStateWithLifecycle().value
+
             BlogDetailScreen(
                 blogId = blogId,
                 onLoadBlogDetail = { id ->
+                    viewModel.updateNetworkStatus()
                     // Fetch the blog post from the list of blogs
                     viewModel.blogPosts.value.find { it.id == id }
                 },
+                networkError = networkError,
+                onRetry = viewModel::retry,
                 modifier = modifier
             )
         }

@@ -35,8 +35,4 @@ object AppModule {
     fun provideGetBlogPostsUseCase(repository: BlogRepository): GetBlogPostsUseCase {
         return GetBlogPostsUseCase(repository)
     }
-
-    @Provides
-    @ApplicationContext
-    fun provideApplicationContext(application: Application): Context = application
 }
