@@ -19,8 +19,12 @@ import com.assignment.vriddemo.domain.model.BlogPost
 import com.assignment.vriddemo.ui.navigation.Screen
 
 @Composable
-fun BlogListScreen(posts: List<BlogPost>, navController: NavController) {
-    LazyColumn {
+fun BlogListScreen(
+    posts: List<BlogPost>,
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(modifier = modifier) {
         itemsIndexed(posts) { index, post ->
             BlogPostItem(post = post) {
                 navController.navigate(Screen.BlogDetail.passId(post.id))

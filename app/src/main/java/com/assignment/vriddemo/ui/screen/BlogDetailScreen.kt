@@ -18,11 +18,15 @@ import com.assignment.vriddemo.ui.viewmodel.BlogViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BlogDetailScreen(blogId: Int, viewModel: BlogViewModel) {
+fun BlogDetailScreen(
+    blogId: Int,
+    viewModel: BlogViewModel,
+    modifier: Modifier = Modifier
+) {
     val blogPosts by viewModel.blogPosts.collectAsStateWithLifecycle()
 
     if (blogPosts.isEmpty()) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     } else {
@@ -30,7 +34,7 @@ fun BlogDetailScreen(blogId: Int, viewModel: BlogViewModel) {
         if (blogPost == null) {
             Text("Blog not found")
         } else {
-            BlogWebView(url = blogPost.url)
+            BlogWebView(url = blogPost.url, modifier = modifier)
         }
     }
 }

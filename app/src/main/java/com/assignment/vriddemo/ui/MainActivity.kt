@@ -4,7 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.assignment.vriddemo.ui.components.CommonTopAppBar
 import com.assignment.vriddemo.ui.navigation.BlogNavGraph
 import com.assignment.vriddemo.ui.theme.VridDemoTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +21,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             VridDemoTheme {
                 val navController = rememberNavController()
-                BlogNavGraph(navController = navController)
+
+                Scaffold(
+                    topBar = {
+                        CommonTopAppBar(navController) // Use the TopAppBar here
+                    },
+                    content = { innerPadding ->
+                        BlogNavGraph(navController = navController, modifier = Modifier.padding(innerPadding)) // Your navigation graph
+                    }
+                )
             }
         }
     }

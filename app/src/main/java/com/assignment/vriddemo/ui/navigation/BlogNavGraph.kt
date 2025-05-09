@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -17,7 +18,7 @@ import com.assignment.vriddemo.ui.viewmodel.BlogViewModel
 
 @SuppressLint("UnrememberedGetBackStackEntry")
 @Composable
-fun BlogNavGraph(navController: NavHostController) {
+fun BlogNavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(
         navController = navController,
         startDestination = Screen.BlogList.route
@@ -27,7 +28,11 @@ fun BlogNavGraph(navController: NavHostController) {
             val viewModel: BlogViewModel = hiltViewModel()
             val posts by viewModel.blogPosts.collectAsStateWithLifecycle()
 
-            BlogListScreen(posts, navController)
+            BlogListScreen(
+                posts = posts,
+                navController = navController,
+                modifier = modifier
+            )
         }
 
         // Blog Detail Screen
@@ -44,7 +49,11 @@ fun BlogNavGraph(navController: NavHostController) {
             val viewModel: BlogViewModel = hiltViewModel(parentEntry)
             val blogId = backStackEntry.arguments?.getInt("blogId") ?: -1
 
-            BlogDetailScreen(blogId, viewModel)
+            BlogDetailScreen(
+                blogId = blogId,
+                viewModel = viewModel,
+                modifier = modifier
+            )
         }
     }
 }
