@@ -49,7 +49,10 @@ fun extractReadTime(content: String): String {
 
     return if (startIndex != -1) {
         val subString = content.substring(startIndex + startKeyword.length)
-        val endIndex = subString.indexOf("seconds") + "seconds".length
+            .replace("minutes", "mins")
+            .replace("seconds", "secs")
+
+        val endIndex = subString.indexOf("secs") + "secs".length
         if (endIndex != -1) {
             subString.substring(0, endIndex).trim()
         } else {
