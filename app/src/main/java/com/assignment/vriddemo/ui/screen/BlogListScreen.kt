@@ -103,7 +103,7 @@ fun BlogPostItem(post: BlogPost, onClick: (BlogPost) -> Unit, modifier: Modifier
                 Text(
                     text = post.title,
                     style = MaterialTheme.typography.titleMedium,
-                    maxLines = 2,
+                    maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )
 
