@@ -1,5 +1,6 @@
 package com.assignment.vriddemo.ui.screen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -86,28 +87,29 @@ fun BlogPostItem(post: BlogPost, onClick: (BlogPost) -> Unit, modifier: Modifier
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Row(modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically) {
-            AsyncImage(
-                model = post.imageUrl,
-                contentDescription = post.title,
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Crop
-            )
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.Center) {
+            Row (verticalAlignment = Alignment.CenterVertically){
+                AsyncImage(
+                    model = post.imageUrl,
+                    contentDescription = post.title,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = ContentScale.Crop
+                )
 
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = post.title,
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )
+            }
 
-                Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Column {
 
                 Text(
                     text = post.excerpt,
