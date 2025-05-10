@@ -57,7 +57,7 @@ class BlogViewModel @Inject constructor(
                     currentPage++
                 }
                 _networkError.value = false  // Reset network error if data is fetched successfully
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _networkError.value = true
             } finally {
                 _isLoading.value = false
@@ -73,8 +73,10 @@ class BlogViewModel @Inject constructor(
         loadNextPage()  // Retry loading posts
     }
 
-    fun updateNetworkStatus() {
-        _networkError.value = !isNetworkAvailable(context)
+    fun checkNetworkStatus(): Boolean {
+        val isAvailable = isNetworkAvailable(context)
+        _networkError.value = !isAvailable
+        return isAvailable
     }
 }
 

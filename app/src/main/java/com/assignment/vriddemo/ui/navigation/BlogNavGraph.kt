@@ -35,7 +35,10 @@ fun BlogNavGraph(navController: NavHostController, modifier: Modifier = Modifier
                 isLoading = isLoading,
                 onLoadMore = viewModel::loadNextPage,
                 onItemClick = { post ->
-                    navController.navigate(Screen.BlogDetail.passId(post.id))
+                    val networkAvailable = viewModel.checkNetworkStatus()
+                    if (networkAvailable) {
+                        navController.navigate(Screen.BlogDetail.passId(post.id))
+                    }
                 },
                 networkError = networkError,
                 onRetry = viewModel::retry,
@@ -62,7 +65,7 @@ fun BlogNavGraph(navController: NavHostController, modifier: Modifier = Modifier
             BlogDetailScreen(
                 blogId = blogId,
                 onLoadBlogDetail = { id ->
-                    viewModel.updateNetworkStatus()
+                    viewModel.checkNetworkStatus()
                     // Fetch the blog post from the list of blogs
                     viewModel.blogPosts.value.find { it.id == id }
                 },

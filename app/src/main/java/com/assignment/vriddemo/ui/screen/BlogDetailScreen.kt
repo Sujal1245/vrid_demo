@@ -1,5 +1,6 @@
 package com.assignment.vriddemo.ui.screen
 
+import android.annotation.SuppressLint
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -29,7 +30,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import com.assignment.vriddemo.domain.model.BlogPost
 import com.assignment.vriddemo.ui.components.NetworkErrorDialog
-import com.assignment.vriddemo.ui.theme.VridDemoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,6 +57,7 @@ fun BlogDetailScreen(
     }
 }
 
+@SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun BlogWebView(
     url: String,
@@ -89,10 +90,9 @@ fun BlogWebView(
             onRetry()
             showNetworkErrorDialog = false
         })
-        return // Don't show WebView when there's a network error
+        return
     }
 
-    // Column to manage WebView and progress
     Column(modifier = modifier.fillMaxSize()) {
         if (animatedProgress in 0f..0.99f) {
             LinearProgressIndicator(
@@ -108,7 +108,6 @@ fun BlogWebView(
             AndroidView(
                 factory = {
                     webView.apply {
-                        // Set WebViewClient to handle errors
                         webViewClient = object : WebViewClient() {
                             override fun onReceivedError(
                                 view: WebView?,
