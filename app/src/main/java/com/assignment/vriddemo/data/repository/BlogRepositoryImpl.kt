@@ -4,8 +4,9 @@ import com.assignment.vriddemo.data.mappers.toDomainModel
 import com.assignment.vriddemo.data.remote.BlogApiService
 import com.assignment.vriddemo.domain.model.BlogPost
 import com.assignment.vriddemo.domain.repository.BlogRepository
+import javax.inject.Inject
 
-class BlogRepositoryImpl(
+class BlogRepositoryImpl @Inject constructor(
     private val apiService: BlogApiService
 ) : BlogRepository {
 
