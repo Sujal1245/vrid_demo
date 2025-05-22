@@ -3,6 +3,7 @@ package com.assignment.vriddemo.ui.viewmodel
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.assignment.vriddemo.domain.model.BlogPost
@@ -10,7 +11,10 @@ import com.assignment.vriddemo.domain.usecase.GetBlogPostsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +25,13 @@ class BlogViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _blogPosts = MutableStateFlow<List<BlogPost>>(emptyList())
-    val blogPosts = _blogPosts.asStateFlow()
+    val blogPosts = _blogPosts
+        .onStart { loadNextPage() }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = emptyList()
+        )
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
@@ -32,12 +42,6 @@ class BlogViewModel @Inject constructor(
     private var currentPage = 1
     private var endReached = false
 
-    init {
-        if (_blogPosts.value.isEmpty()) {
-            loadNextPage()
-        }
-    }
-
     fun loadNextPage() {
         if (_isLoading.value || endReached) return
 
@@ -47,6 +51,9 @@ class BlogViewModel @Inject constructor(
         }
 
         _isLoading.value = true
+
+        Log.i("Info", "Loading Data...")
+
         viewModelScope.launch {
             try {
                 val newPosts = getBlogPostsUseCase.execute(currentPage)

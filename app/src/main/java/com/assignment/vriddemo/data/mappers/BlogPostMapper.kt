@@ -1,18 +1,14 @@
 package com.assignment.vriddemo.data.mappers
 
+import android.text.Html
 import com.assignment.vriddemo.data.remote.BlogPostDto
 import com.assignment.vriddemo.domain.model.BlogPost
-import android.text.Html
-import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 fun BlogPostDto.toDomainModel(): BlogPost {
     val imageUrl = this.jetpackFeaturedMediaUrl.orEmpty()
     val readTime = extractReadTime(this.content.rendered)
-
-    Log.d("BlogPostMapper", "Image URL: $imageUrl, Read Time: $readTime")
-
     val publishDate = parsePublishDate(this.date)
 
     return BlogPost(
